@@ -5,9 +5,8 @@
 package de.rretzbach.kimabo;
 
 /**
- *
  * @author rretzbach
  */
-public interface TargetFinder<S,T> {
+public interface TargetFinder<S, T> {
     T find(S source, int book, int page);
 }

@@ -18,12 +18,12 @@ import junit.framework.TestCase;
  */
 public class CommandLineAppTest extends TestCase {
 
-    private Resizer resizer;
+    private TaskFactory resizer;
 
     @Override
     protected void setUp() throws Exception {
         Injector injector = Guice.createInjector(new TestResizerModule("MockSeries"));
-        resizer = injector.getInstance(Resizer.class);
+        resizer = injector.getInstance(TaskFactory.class);
     }
 
     public void testShouldSortSourcesCaseInsensitive() {

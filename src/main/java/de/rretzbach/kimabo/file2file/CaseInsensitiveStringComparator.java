@@ -7,7 +7,6 @@ package de.rretzbach.kimabo.file2file;
 import java.util.Comparator;
 
 /**
- *
  * @author rretzbach
  */
 public class CaseInsensitiveStringComparator implements Comparator<String> {

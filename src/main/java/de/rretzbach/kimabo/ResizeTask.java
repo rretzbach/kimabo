@@ -5,36 +5,29 @@
 package de.rretzbach.kimabo;
 
 /**
- *
  * @author rretzbach
  */
-public class ResizeTask {
-    private final String source;
-    private final String target;
+public class ResizeTask<S, T> {
+    private final S source;
+    private final T target;
 
-
-
-    public ResizeTask(String source, String target) {
+    public ResizeTask(S source, T target) {
         this.source = source;
         this.target = target;
     }
 
-    public String getSource() {
+    public S getSource() {
         return this.source;
     }
-    
-    public String getTarget() {
+
+    public T getTarget() {
         return this.target;
-    }
-    
-    public void execute() {
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public String toString() {
-        return String.format("[ResizeTask: source=%s,target=%s]", source, target);
+        return String.format("[ResizeTask: source=%s,target=%s]", source.toString(), target.toString());
     }
-    
-    
+
+
 }

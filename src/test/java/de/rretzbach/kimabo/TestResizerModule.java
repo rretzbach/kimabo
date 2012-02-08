@@ -25,7 +25,7 @@ public class TestResizerModule extends AbstractModule {
         bind(ImageReader.class).to(MockImageReader.class);
         bind(ImageWriter.class).to(MockImageWriter.class);
         bind(TargetFinder.class).to(EchoStringTargetFinder.class);
-        bindConstant().annotatedWith(SeriesName.class).to("MockSeries");
+        bindConstant().annotatedWith(SeriesName.class).to(seriesName);
         bindConstant().annotatedWith(PagesPerBook.class).to(3);
     }
 }

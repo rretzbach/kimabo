@@ -4,41 +4,38 @@
  */
 package de.rretzbach.kimabo.file2file;
 
-import de.rretzbach.kimabo.TargetFinder;
 import com.google.inject.Inject;
-import de.rretzbach.kimabo.ImageReader;
-import de.rretzbach.kimabo.ImageWriter;
-import de.rretzbach.kimabo.ResizeTask;
-import de.rretzbach.kimabo.Resizer;
-import de.rretzbach.kimabo.SourceProvider;
-import de.rretzbach.kimabo.ThreadHelper;
+import de.rretzbach.kimabo.*;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author rretzbach
  */
 public class CommandLineApp {
-    private final SourceProvider sourceProvider;
-    private final Resizer resizer;
+    private final SourceProvider<String> sourceProvider;
+    private final TaskFactory taskFactory;
+    private ImageReader<String> imageReader;
+    private ImageWriter<String> imageWriter;
 
     @Inject
-    public CommandLineApp(SourceProvider sourceProvider, Resizer resizer) {
+    public CommandLineApp(SourceProvider<String> sourceProvider, TaskFactory<String, String> taskFactory, ImageReader<String> imageReader, ImageWriter<String> imageWriter) {
         this.sourceProvider = sourceProvider;
-        this.resizer = resizer;
+        this.taskFactory = taskFactory;
+        this.imageReader = imageReader;
+        this.imageWriter = imageWriter;
     }
 
-    public void main(String[] args) {
-        
+    public void main() {
         List<String> sources = sourceProvider.getSources();
-
         Collections.sort(sources, new CaseInsensitiveStringComparator());
 
-        Set<ResizeTask> tasks = resizer.sliceResizeTasks(sources);
+        Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 
-        ThreadHelper th = new ThreadHelper(tasks);
+        Resizer<String, String> th = new Resizer<String, String>(imageReader, imageWriter);
+        th.addAll(tasks);
         th.setNumberOfThreads(8);
         th.execute();
     }

@@ -16,21 +16,19 @@ import junit.framework.TestSuite;
 public class AppTest
         extends TestCase {
 
-    private Resizer resizer;
+    private TaskFactory resizer;
 
     @Override
     protected void setUp() throws Exception {
         Injector injector = Guice.createInjector(new TestResizerModule("MockSeries"));
-        resizer = injector.getInstance(Resizer.class);
+        resizer = injector.getInstance(TaskFactory.class);
     }
 
     /**
      * @return the suite of tests being tested
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite(AppTest.class);
-        suite.addTest(new CommandLineAppTest());
-        return suite;
+        return new TestSuite(new Class[]{AppTest.class, CommandLineAppTest.class});
     }
 
     public void testShouldSliceOneSmallBook() {

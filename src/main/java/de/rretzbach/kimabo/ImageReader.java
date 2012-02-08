@@ -7,7 +7,6 @@ package de.rretzbach.kimabo;
 import java.awt.image.BufferedImage;
 
 /**
- *
  * @author rretzbach
  */
 public interface ImageReader<T> {

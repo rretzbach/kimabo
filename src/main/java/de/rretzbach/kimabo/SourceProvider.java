@@ -7,11 +7,10 @@ package de.rretzbach.kimabo;
 import java.util.List;
 
 /**
- *
  * @author rretzbach
  */
-public interface SourceProvider {
+public interface SourceProvider<S> {
 
-    public List<String> getSources();
-    
+    public List<S> getSources();
+
 }
