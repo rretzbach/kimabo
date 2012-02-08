@@ -1,0 +1,6 @@
+.DS_Store
+kindle
+source
+.idea
+*.iml
+target
