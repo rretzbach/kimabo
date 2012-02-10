@@ -7,10 +7,8 @@ package de.rretzbach.kimabo;
 import sun.awt.image.BufferedImageGraphicsConfig;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
+import java.awt.geom.AffineTransform;
+import java.awt.image.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,12 +33,23 @@ public class ImageResizer {
     public static BufferedImage resizeTrick(BufferedImage image, int width, int height) {
         image = createCompatibleImage(image);
 
-        // TODO: rotate
-        //if (image.width() > image.height()) {
+        // TODO: rotate and scale in one step
+        if (image.getWidth() > image.getHeight()) {
             // rotate anti clock wise 90 degrees
             // this is most comfortable for righties
-        //    image.rotate(270.0);
-        //}
+            //AffineTransform trans = new AffineTransform();
+            //trans.rotate(Math.toRadians(270), image.getWidth() / 2, image.getHeight() / 2);
+            //AffineTransformOp op = new AffineTransformOp(trans, AffineTransformOp.TYPE_BICUBIC);
+            //image = op.filter(image, new BufferedImage(image.getHeight(), image.getWidth(),
+            //        image.getType()));
+            // TODO: when rotated the image is always widthxwidth, but should be heightxwidth
+            BufferedImage rotated = new AffineTransformOp(
+                    AffineTransform.getQuadrantRotateInstance(
+                            3, image.getWidth() / 2, image.getHeight() / 2),
+                    AffineTransformOp.TYPE_BILINEAR).filter(image, null);
+            System.out.println(rotated.getHeight());
+            return rotated;
+        }
 
         double resizeFactor = shrink(image.getWidth(), image.getHeight(), 600, 800);
         return resize(image, (int)(image.getWidth() * resizeFactor), (int)(image.getHeight() * resizeFactor));
