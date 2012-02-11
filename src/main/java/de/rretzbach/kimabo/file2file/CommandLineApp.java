@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class CommandLineApp {
     private final SourceProvider<String> sourceProvider;
-    private final TaskFactory taskFactory;
+    private final TaskFactory<String, String> taskFactory;
     private ImageReader<String> imageReader;
     private ImageWriter<String> imageWriter;
 

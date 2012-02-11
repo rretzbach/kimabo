@@ -22,7 +22,6 @@ public class FileImageReader implements ImageReader<String> {
     }
 
     public BufferedImage read(String source) {
-        System.out.println("source: " + source);
         try {
             return ImageIO.read(new File(source));
         } catch (IOException ex) {

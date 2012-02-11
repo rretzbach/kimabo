@@ -2,20 +2,15 @@ package de.rretzbach.kimabo.file2file;
 
 import de.rretzbach.kimabo.TargetFinder;
 
-import java.io.File;
-
 /**
- * Created by IntelliJ IDEA.
+ * Targets are file paths including Book directories
  * User: rretzbach
  * Date: 07.02.12
  * Time: 21:02
- * To change this template use File | Settings | File Templates.
  */
 public class DirTargetFinder implements TargetFinder<String, String> {
     @Override
-    public String find(String source, int book, int page) {
-        String file = "/Users/rretzbach/Documents/workspace/kimabo/kindle/" + (new File(source).getName());
-
-        return file;
+    public String find(String source, String seriesName, int book, int page) {
+        return String.format("kindle/%s %02d/%05d.%s", seriesName, book + 1, page + 1, "png");
     }
 }

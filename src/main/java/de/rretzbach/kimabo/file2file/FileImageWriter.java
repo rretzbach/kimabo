@@ -5,6 +5,7 @@
 package de.rretzbach.kimabo.file2file;
 
 import de.rretzbach.kimabo.ImageWriter;
+import org.apache.commons.io.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -22,9 +23,12 @@ public class FileImageWriter implements ImageWriter<String> {
     }
 
     public void write(BufferedImage image, String dest) {
-        System.out.println("dest: " + dest);
         try {
             File file = new File(dest);
+            // TODO: move this piece it doesn't have to be executed for EVERY file... but only once
+            if (!file.getParentFile().exists()) {
+                FileUtils.forceMkdir(file.getParentFile());
+            }
 
             ImageIO.write(image, "png", file);
         } catch (IOException ex) {

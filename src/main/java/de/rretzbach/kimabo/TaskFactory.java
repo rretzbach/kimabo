@@ -16,11 +16,13 @@ import java.util.Set;
 public class TaskFactory<S, T> {
 
     private final TargetFinder<S, T> targetFinder;
+    private String seriesName;
     private final int pagesPerBook;
 
     @Inject
     public TaskFactory(ImageReader<S> imageReader, ImageWriter<T> imageWriter, TargetFinder<S, T> targetFinder, @SeriesName String seriesName, @PagesPerBook int pagesPerBook) {
         this.targetFinder = targetFinder;
+        this.seriesName = seriesName;
         this.pagesPerBook = pagesPerBook;
     }
 
@@ -34,10 +36,8 @@ public class TaskFactory<S, T> {
                 ++book;
                 page = 0;
             }
-            tasks.add(new ResizeTask<S, T>(source, targetFinder.find(source, book, page++)));
+            tasks.add(new ResizeTask<S, T>(source, targetFinder.find(source, seriesName, book, page++)));
         }
-
-        System.out.println("tasks: " + tasks);
 
         return tasks;
     }

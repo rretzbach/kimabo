@@ -17,6 +17,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @BindingAnnotation
+//TODO: no injection necessary
 public @interface SeriesName {
 
 }

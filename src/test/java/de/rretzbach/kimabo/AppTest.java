@@ -2,13 +2,16 @@ package de.rretzbach.kimabo;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 import de.rretzbach.kimabo.file2file.CommandLineAppTest;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Unit test for simple App.
@@ -16,12 +19,13 @@ import junit.framework.TestSuite;
 public class AppTest
         extends TestCase {
 
-    private TaskFactory resizer;
+    private TaskFactory<String, String> taskFactory;
 
     @Override
     protected void setUp() throws Exception {
         Injector injector = Guice.createInjector(new TestResizerModule("MockSeries"));
-        resizer = injector.getInstance(TaskFactory.class);
+        taskFactory = injector.getInstance(Key.get(new TypeLiteral<TaskFactory<String, String>>() {
+        }));
     }
 
     /**
@@ -32,10 +36,10 @@ public class AppTest
     }
 
     public void testShouldSliceOneSmallBook() {
-        List<String> sources = Arrays.asList(new String[]{"1", "2"});
-        Set<ResizeTask> tasks = resizer.sliceResizeTasks(sources);
+        List<String> sources = Arrays.asList("1", "2");
+        Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 
-        for (ResizeTask resizeTask : tasks) {
+        for (ResizeTask<String, String> resizeTask : tasks) {
             if (resizeTask.getSource().equals("1")) {
                 assertEquals("b1p1_1", resizeTask.getTarget());
             } else if (resizeTask.getSource().equals("2")) {
@@ -47,10 +51,10 @@ public class AppTest
     }
 
     public void testShouldSliceOneFullBook() {
-        List<String> sources = Arrays.asList(new String[]{"1", "2", "3"});
-        Set<ResizeTask> tasks = resizer.sliceResizeTasks(sources);
+        List<String> sources = Arrays.asList("1", "2", "3");
+        Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 
-        for (ResizeTask resizeTask : tasks) {
+        for (ResizeTask<String, String> resizeTask : tasks) {
             if (resizeTask.getSource().equals("1")) {
                 assertEquals("b1p1_1", resizeTask.getTarget());
             } else if (resizeTask.getSource().equals("2")) {
@@ -64,10 +68,10 @@ public class AppTest
     }
 
     public void testShouldSliceManyBooks() {
-        List<String> sources = Arrays.asList(new String[]{"1", "2", "3", "4", "5", "6", "7"});
-        Set<ResizeTask> tasks = resizer.sliceResizeTasks(sources);
+        List<String> sources = Arrays.asList("1", "2", "3", "4", "5", "6", "7");
+        Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 
-        for (ResizeTask resizeTask : tasks) {
+        for (ResizeTask<String, String> resizeTask : tasks) {
             if (resizeTask.getSource().equals("1")) {
                 assertEquals("b1p1_1", resizeTask.getTarget());
             } else if (resizeTask.getSource().equals("2")) {

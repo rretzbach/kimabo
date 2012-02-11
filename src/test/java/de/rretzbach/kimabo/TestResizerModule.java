@@ -5,12 +5,10 @@
 package de.rretzbach.kimabo;
 
 import com.google.inject.AbstractModule;
-import de.rretzbach.kimabo.file2file.*;
-import com.google.inject.Binder;
-import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
+import de.rretzbach.kimabo.file2file.BaseInputDir;
 
 /**
- *
  * @author rretzbach
  */
 public class TestResizerModule extends AbstractModule {
@@ -22,10 +20,17 @@ public class TestResizerModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(ImageReader.class).to(MockImageReader.class);
-        bind(ImageWriter.class).to(MockImageWriter.class);
-        bind(TargetFinder.class).to(EchoStringTargetFinder.class);
+        bind(new TypeLiteral<ImageReader<String>>() {
+        }).to(MockImageReader.class);
+        bind(new TypeLiteral<ImageWriter<String>>() {
+        }).to(MockImageWriter.class);
+        bind(new TypeLiteral<TargetFinder<String, String>>() {
+        }).to(EchoStringTargetFinder.class);
+        bind(new TypeLiteral<TaskFactory<String, String>>() {
+        });
+
         bindConstant().annotatedWith(SeriesName.class).to(seriesName);
         bindConstant().annotatedWith(PagesPerBook.class).to(3);
+        bindConstant().annotatedWith(BaseInputDir.class).to("");
     }
 }

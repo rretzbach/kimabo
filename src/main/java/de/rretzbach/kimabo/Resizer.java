@@ -18,13 +18,15 @@ public class Resizer<S, T> {
     private int threadNumber;
     private ImageReader<S> imageReader;
     private ImageWriter<T> imageWriter;
+    private final ImageHelper imageHelper;
 
     public Resizer(ImageReader<S> imageReader, ImageWriter<T> imageWriter) {
         this.imageReader = imageReader;
         this.imageWriter = imageWriter;
+        this.imageHelper = new ImageHelper();
     }
     // start 1 file reader thread
-    // start n image resizer threads
+    // start n image imageHelper threads
     // start 1 file writer thread (only starts if reader is finished)
 
     public void addAll(Collection<ResizeTask<S, T>> tasks) {
@@ -36,20 +38,19 @@ public class Resizer<S, T> {
     }
 
     public void execute() {
-        System.out.println("tasks: " + tasks);
-        for (ResizeTask task : tasks) {
+        for (ResizeTask<S, T> task : tasks) {
             execute(task);
         }
     }
 
     private void execute(ResizeTask<S, T> task) {
-        System.out.println("task: " + task);
-
         try {
             BufferedImage image = imageReader.read(task.getSource());
-            image = ImageResizer.resizeTrick(image, 600, 800);
+            image = imageHelper.resize(image);
+            image = imageHelper.desaturate(image);
             imageWriter.write(image, task.getTarget());
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println("Error while executing task " + task);
         }
     }

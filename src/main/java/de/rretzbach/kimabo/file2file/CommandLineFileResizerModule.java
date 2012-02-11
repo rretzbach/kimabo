@@ -19,7 +19,7 @@ public class CommandLineFileResizerModule extends AbstractModule {
         //seriesName = args[0];
         seriesName = "TestSeries";
         //baseDirectory = args[1];
-        baseDirectory = "/Users/rretzbach/Documents/workspace/kimabo/source";
+        baseDirectory = "source";
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CommandLineFileResizerModule extends AbstractModule {
         }).to(FileSourceProvider.class);
 
         bindConstant().annotatedWith(SeriesName.class).to(seriesName);
-        bindConstant().annotatedWith(PagesPerBook.class).to(3);
+        bindConstant().annotatedWith(PagesPerBook.class).to(10);
         bindConstant().annotatedWith(BaseInputDir.class).to(baseDirectory);
     }
 }

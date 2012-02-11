@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.rretzbach.kimabo;
+package de.rretzbach.kimabo.file2file;
 
 import com.google.inject.BindingAnnotation;
 
