@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import de.rretzbach.kimabo.*;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -34,9 +35,12 @@ public class CommandLineApp {
 
         Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 
-        Resizer<String, String> th = new Resizer<String, String>(imageReader, imageWriter);
+        System.out.println("Start: " + new Date());
+
+        Resizer<String, String> th = new ParallelResizer<String, String>(imageReader, imageWriter);
         th.addAll(tasks);
-        th.setNumberOfThreads(8);
         th.execute();
+
+        System.out.println("End: " + new Date());
     }
 }

@@ -34,7 +34,7 @@ public class CommandLineFileResizerModule extends AbstractModule {
         }).to(FileSourceProvider.class);
 
         bindConstant().annotatedWith(SeriesName.class).to(seriesName);
-        bindConstant().annotatedWith(PagesPerBook.class).to(10);
+        bindConstant().annotatedWith(PagesPerBook.class).to(500);
         bindConstant().annotatedWith(BaseInputDir.class).to(baseDirectory);
     }
 }

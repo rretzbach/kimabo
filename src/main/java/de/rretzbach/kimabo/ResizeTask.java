@@ -24,6 +24,10 @@ public class ResizeTask<S, T> {
         return this.target;
     }
 
+    public ImageResizeTask read(ImageReader<S> reader) {
+        return new ImageResizeTask(reader.read(source), target);
+    }
+
     @Override
     public String toString() {
         return String.format("[ResizeTask: source=%s,target=%s]", source.toString(), target.toString());
