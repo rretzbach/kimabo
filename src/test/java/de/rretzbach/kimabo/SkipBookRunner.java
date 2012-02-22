@@ -15,8 +15,8 @@ import org.junit.runners.model.InitializationError;
  * Date: 22.02.12
  * Time: 18:17
  */
-public class MockTestRunner extends GuiceTestRunner {
-    public MockTestRunner(Class<?> classToRun) throws InitializationError {
+public class SkipBookRunner extends GuiceTestRunner {
+    public SkipBookRunner(Class<?> classToRun) throws InitializationError {
         super(classToRun, new AbstractModule() {
             @Override
             protected void configure() {
@@ -32,7 +32,7 @@ public class MockTestRunner extends GuiceTestRunner {
                 bindConstant().annotatedWith(SeriesName.class).to("MockSeries");
                 bindConstant().annotatedWith(PagesPerBook.class).to(3);
                 bindConstant().annotatedWith(BaseInputDir.class).to("");
-                bindConstant().annotatedWith(BeginBookIndex.class).to(0);
+                bindConstant().annotatedWith(BeginBookIndex.class).to(2);
             }
         });
     }

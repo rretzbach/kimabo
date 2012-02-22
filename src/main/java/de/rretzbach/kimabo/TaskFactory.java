@@ -18,20 +18,26 @@ public class TaskFactory<S, T> {
     private final TargetFinder<S, T> targetFinder;
     private String seriesName;
     private final int pagesPerBook;
+    private int beginBookIndex = 0;
 
     @Inject
-    public TaskFactory(ImageReader<S> imageReader, ImageWriter<T> imageWriter, TargetFinder<S, T> targetFinder, @SeriesName String seriesName, @PagesPerBook int pagesPerBook) {
+    public TaskFactory(ImageReader<S> imageReader, ImageWriter<T> imageWriter, TargetFinder<S, T> targetFinder, @SeriesName String seriesName, @PagesPerBook int pagesPerBook, @BeginBookIndex int beginBookIndex) {
         this.targetFinder = targetFinder;
         this.seriesName = seriesName;
         this.pagesPerBook = pagesPerBook;
+        this.beginBookIndex = beginBookIndex;
     }
 
     public Set<ResizeTask<S, T>> sliceResizeTasks(List<S> sources) {
+        return sliceResizeTasks(sources, beginBookIndex);
+    }
+
+    public Set<ResizeTask<S, T>> sliceResizeTasks(List<S> sources, int beginIndex) {
         Set<ResizeTask<S, T>> tasks = new HashSet<ResizeTask<S, T>>();
 
-        int book = 0;
+        int book = beginIndex;
         int page = 0;
-        for (S source : sources) {
+        for (S source : sources.subList(pagesPerBook * beginIndex, sources.size())) {
             if (page == pagesPerBook) {
                 ++book;
                 page = 0;

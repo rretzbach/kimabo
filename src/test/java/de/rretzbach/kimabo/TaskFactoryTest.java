@@ -76,4 +76,17 @@ public class TaskFactoryTest {
             }
         }
     }
+
+    @Test
+    public void shouldSkipBooksIfRequested() {
+        List<String> sources = Arrays.asList("1", "2", "3", "4", "5", "6", "7");
+        Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources, 2);
+        for (ResizeTask<String, String> resizeTask : tasks) {
+            if (resizeTask.getSource().equals("7")) {
+                assertEquals("b3p1_7", resizeTask.getTarget());
+            } else {
+                fail("Contained unexpected element " + resizeTask);
+            }
+        }
+    }
 }
