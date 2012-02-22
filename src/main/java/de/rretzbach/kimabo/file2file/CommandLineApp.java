@@ -5,28 +5,30 @@
 package de.rretzbach.kimabo.file2file;
 
 import com.google.inject.Inject;
-import de.rretzbach.kimabo.*;
+import de.rretzbach.kimabo.ResizeTask;
+import de.rretzbach.kimabo.Resizer;
+import de.rretzbach.kimabo.SourceProvider;
+import de.rretzbach.kimabo.TaskFactory;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 /**
+ * This concrete app will read file paths recursively from a given base directory and resize and rename all found images and write them into a target directory
+ *
  * @author rretzbach
  */
 public class CommandLineApp {
     private final SourceProvider<String> sourceProvider;
     private final TaskFactory<String, String> taskFactory;
-    private ImageReader<String> imageReader;
-    private ImageWriter<String> imageWriter;
+    private Resizer<String, String> resizer;
 
     @Inject
-    public CommandLineApp(SourceProvider<String> sourceProvider, TaskFactory<String, String> taskFactory, ImageReader<String> imageReader, ImageWriter<String> imageWriter) {
+    public CommandLineApp(SourceProvider<String> sourceProvider, TaskFactory<String, String> taskFactory, Resizer<String, String> resizer) {
         this.sourceProvider = sourceProvider;
         this.taskFactory = taskFactory;
-        this.imageReader = imageReader;
-        this.imageWriter = imageWriter;
+        this.resizer = resizer;
     }
 
     public void main() {
@@ -35,12 +37,7 @@ public class CommandLineApp {
 
         Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 
-        System.out.println("Start: " + new Date());
-
-        Resizer<String, String> th = new ParallelResizer<String, String>(imageReader, imageWriter);
-        th.addAll(tasks);
-        th.execute();
-
-        System.out.println("End: " + new Date());
+        resizer.addAll(tasks);
+        resizer.execute();
     }
 }

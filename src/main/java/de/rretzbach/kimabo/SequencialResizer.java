@@ -27,16 +27,15 @@ public class SequencialResizer<S, T> implements Resizer<S, T> {
     private Set<ResizeTask<S, T>> tasks = new HashSet<ResizeTask<S, T>>();
     private ImageReader<S> imageReader;
     private ImageWriter<T> imageWriter;
-    private final ImageHelper imageHelper;
+    private int preferredWidth;
+    private int preferredHeight;
 
-    public SequencialResizer(ImageReader<S> imageReader, ImageWriter<T> imageWriter) {
+    public SequencialResizer(ImageReader<S> imageReader, ImageWriter<T> imageWriter, @PreferredWidth int preferredWidth, @PreferredHeight int preferredHeight) {
         this.imageReader = imageReader;
         this.imageWriter = imageWriter;
-        this.imageHelper = new ImageHelper();
+        this.preferredWidth = preferredWidth;
+        this.preferredHeight = preferredHeight;
     }
-    // start 1 file reader thread
-    // start n image imageHelper threads
-    // start 1 file writer thread (only starts if reader is finished)
 
     @Override
     public void addAll(Collection<ResizeTask<S, T>> tasks) {
@@ -52,10 +51,10 @@ public class SequencialResizer<S, T> implements Resizer<S, T> {
 
     private void execute(ResizeTask<S, T> task) {
         try {
-            BufferedImage image = imageReader.read(task.getSource());
-            image = imageHelper.resize(image);
-            image = imageHelper.desaturate(image);
-            imageWriter.write(image, task.getTarget());
+            ResizableImage image = new ResizableImage(imageReader.read(task.getSource()));
+            image.resize(preferredWidth, preferredHeight);
+            image.desaturate();
+            imageWriter.write(image.getImage(), task.getTarget());
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error while executing task " + task);

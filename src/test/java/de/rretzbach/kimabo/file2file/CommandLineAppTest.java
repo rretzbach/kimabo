@@ -4,34 +4,28 @@
  */
 package de.rretzbach.kimabo.file2file;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
+import com.google.inject.Inject;
+import de.rretzbach.kimabo.MockTestRunner;
 import de.rretzbach.kimabo.ResizeTask;
 import de.rretzbach.kimabo.TaskFactory;
-import de.rretzbach.kimabo.TestResizerModule;
-import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-/**
- * @author rretzbach
- */
-public class CommandLineAppTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-    private TaskFactory<String, String> taskFactory;
+@RunWith(MockTestRunner.class)
+public class CommandLineAppTest {
 
-    @Override
-    protected void setUp() throws Exception {
-        Injector injector = Guice.createInjector(new TestResizerModule("MockSeries"));
-        taskFactory = injector.getInstance(Key.get(new TypeLiteral<TaskFactory<String, String>>() {
-        }));
-    }
+    @Inject
+    TaskFactory<String, String> taskFactory;
 
-    public void testShouldSortSourcesCaseInsensitive() {
+    @Test
+    public void shouldSortSourcesCaseInsensitive() {
         List<String> sources = Arrays.asList("Mock_c01", "mock_C02", "MOCk_C03");
         Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
         for (ResizeTask<String, String> resizeTask : tasks) {

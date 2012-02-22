@@ -1,41 +1,24 @@
 package de.rretzbach.kimabo;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
-import de.rretzbach.kimabo.file2file.CommandLineAppTest;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import com.google.inject.Inject;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest
-        extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-    private TaskFactory<String, String> taskFactory;
+@RunWith(MockTestRunner.class)
+public class TaskFactoryTest {
 
-    @Override
-    protected void setUp() throws Exception {
-        Injector injector = Guice.createInjector(new TestResizerModule("MockSeries"));
-        taskFactory = injector.getInstance(Key.get(new TypeLiteral<TaskFactory<String, String>>() {
-        }));
-    }
+    @Inject
+    TaskFactory<String, String> taskFactory;
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite() {
-        return new TestSuite(new Class[]{AppTest.class, CommandLineAppTest.class});
-    }
-
-    public void testShouldSliceOneSmallBook() {
+    @Test
+    public void shouldSliceOneSmallBook() {
         List<String> sources = Arrays.asList("1", "2");
         Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 
@@ -50,7 +33,8 @@ public class AppTest
         }
     }
 
-    public void testShouldSliceOneFullBook() {
+    @Test
+    public void shouldSliceOneFullBook() {
         List<String> sources = Arrays.asList("1", "2", "3");
         Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 
@@ -67,7 +51,8 @@ public class AppTest
         }
     }
 
-    public void testShouldSliceManyBooks() {
+    @Test
+    public void shouldSliceManyBooks() {
         List<String> sources = Arrays.asList("1", "2", "3", "4", "5", "6", "7");
         Set<ResizeTask<String, String>> tasks = taskFactory.sliceResizeTasks(sources);
 

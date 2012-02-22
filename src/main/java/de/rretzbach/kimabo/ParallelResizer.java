@@ -4,6 +4,8 @@
  */
 package de.rretzbach.kimabo;
 
+import com.google.inject.Inject;
+
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.HashSet;
@@ -36,12 +38,15 @@ public class ParallelResizer<S, T> implements Resizer<S, T> {
     private Set<ResizeTask<S, T>> tasks = new HashSet<ResizeTask<S, T>>();
     private ImageReader<S> imageReader;
     private ImageWriter<T> imageWriter;
-    private final ImageHelper imageHelper;
+    private int preferredWidth;
+    private int preferredHeight;
 
-    public ParallelResizer(ImageReader<S> imageReader, ImageWriter<T> imageWriter) {
+    @Inject
+    public ParallelResizer(ImageReader<S> imageReader, ImageWriter<T> imageWriter, @PreferredWidth int preferredWidth, @PreferredHeight int preferredHeight) {
         this.imageReader = imageReader;
         this.imageWriter = imageWriter;
-        this.imageHelper = new ImageHelper();
+        this.preferredWidth = preferredWidth;
+        this.preferredHeight = preferredHeight;
     }
 
     @Override
@@ -69,10 +74,9 @@ public class ParallelResizer<S, T> implements Resizer<S, T> {
 
     private void execute(ResizeTask<S, T> task) {
         try {
-            BufferedImage image = imageReader.read(task.getSource());
-            image = imageHelper.resize(image);
-            image = imageHelper.desaturate(image);
-            imageWriter.write(image, task.getTarget());
+            ResizableImage image = new ResizableImage(imageReader.read(task.getSource()));
+            image.resize(preferredWidth, preferredHeight).desaturate();
+            imageWriter.write(image.getImage(), task.getTarget());
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error while executing task " + task);

@@ -16,10 +16,8 @@ public class CommandLineFileResizerModule extends AbstractModule {
     private final String baseDirectory;
 
     public CommandLineFileResizerModule(String[] args) {
-        //seriesName = args[0];
-        seriesName = "TestSeries";
-        //baseDirectory = args[1];
-        baseDirectory = "source";
+        seriesName = args[0];
+        baseDirectory = args[1];
     }
 
     @Override
@@ -36,5 +34,8 @@ public class CommandLineFileResizerModule extends AbstractModule {
         bindConstant().annotatedWith(SeriesName.class).to(seriesName);
         bindConstant().annotatedWith(PagesPerBook.class).to(500);
         bindConstant().annotatedWith(BaseInputDir.class).to(baseDirectory);
+        bindConstant().annotatedWith(PreferredWidth.class).to(600);
+        bindConstant().annotatedWith(PreferredHeight.class).to(800);
+
     }
 }
