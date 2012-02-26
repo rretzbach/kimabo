@@ -21,6 +21,7 @@ public class ResizableImage {
 
     /**
      * Reduces the colors in the underlying image to grayscale
+     *
      * @return instance for fluent interface
      */
     public ResizableImage desaturate() {
