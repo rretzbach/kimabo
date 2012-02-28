@@ -7,17 +7,44 @@ package de.rretzbach.kimabo.file2file;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import de.rretzbach.kimabo.*;
+import org.apache.commons.cli.*;
 
 /**
  * @author rretzbach
  */
 public class CommandLineFileResizerModule extends AbstractModule {
-    private final String seriesName;
-    private final String baseDirectory;
+    private String seriesName = "Unnamed";
+    private String baseDirectory = ".";
+    private int pagesPerBook = 300;
+    private int beginBookIndex = 0;
 
     public CommandLineFileResizerModule(String[] args) {
-        seriesName = args[0];
-        baseDirectory = args[1];
+        try {
+            Options options = new Options();
+            options.addOption("s", "series-name", true, "Name of the series");
+            options.addOption("d", "directory", true, "Base directory");
+            options.addOption("p", "pages-per-book", true, "Number of pages per book");
+            options.addOption("b", "begin-book-index", true, "Index of first book to render");
+
+            CommandLineParser parser = new GnuParser();
+            CommandLine cmd = parser.parse( options, args);
+
+            if (cmd.hasOption("series-name")) {
+                seriesName = cmd.getOptionValue("series-name");
+            }
+            if (cmd.hasOption("directory")) {
+                baseDirectory = cmd.getOptionValue("directory");
+            }
+            if (cmd.hasOption("pages-per-book")) {
+                pagesPerBook = Integer.parseInt(cmd.getOptionValue("pages-per-book"));
+            }
+            if (cmd.hasOption("begin-book-index")) {
+                beginBookIndex = Integer.parseInt(cmd.getOptionValue("begin-book-index"));
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -30,12 +57,14 @@ public class CommandLineFileResizerModule extends AbstractModule {
         }).to(DirTargetFinder.class);
         bind(new TypeLiteral<SourceProvider<String>>() {
         }).to(FileSourceProvider.class);
+        bind(new TypeLiteral<Resizer<String, String>>() {
+        }).to(new TypeLiteral<ParallelResizer<String, String>>(){});
 
         bindConstant().annotatedWith(SeriesName.class).to(seriesName);
-        bindConstant().annotatedWith(PagesPerBook.class).to(500);
+        bindConstant().annotatedWith(PagesPerBook.class).to(pagesPerBook);
         bindConstant().annotatedWith(BaseInputDir.class).to(baseDirectory);
+        bindConstant().annotatedWith(BeginBookIndex.class).to(beginBookIndex);
         bindConstant().annotatedWith(PreferredWidth.class).to(600);
         bindConstant().annotatedWith(PreferredHeight.class).to(800);
-
     }
 }

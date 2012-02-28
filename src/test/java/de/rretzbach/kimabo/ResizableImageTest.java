@@ -42,4 +42,11 @@ public class ResizableImageTest {
         double resizeFactor = resizableImage.computeResizeFactor(80, 50);
         Assert.assertEquals(0.25d, resizeFactor, tolerance);
     }
+
+    @Test
+    public void shouldScaleDownWidthIfLandscape() {
+        ResizableImage resizableImage = new ResizableImage(new BufferedImage(2400, 1200, BufferedImage.TYPE_INT_RGB));
+        double resizeFactor = resizableImage.computeResizeFactor(600, 800);
+        Assert.assertEquals(0.25d, resizeFactor, tolerance);
+    }
 }

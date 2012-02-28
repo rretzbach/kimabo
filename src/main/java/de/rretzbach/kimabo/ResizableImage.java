@@ -67,12 +67,8 @@ public class ResizableImage {
         int sourceWidth = image.getWidth();
         int sourceHeight = image.getHeight();
 
-        // image will be rotated, so compute the correct resize factor
-        if (sourceWidth > sourceHeight) {
-            return computeResizeFactor(preferredHeight, preferredWidth);
-        }
-
         double resizeFactor = (double) preferredHeight / (double) sourceHeight;
+
         // if source image orientation is landscape
         if (resizeFactor * sourceWidth > preferredWidth) {
             // then change factor so that width won't exceed 600px even if height will be smaller than 800px
