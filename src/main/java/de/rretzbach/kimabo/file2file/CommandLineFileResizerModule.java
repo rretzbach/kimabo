@@ -25,10 +25,16 @@ public class CommandLineFileResizerModule extends AbstractModule {
             options.addOption("d", "directory", true, "Base directory");
             options.addOption("p", "pages-per-book", true, "Number of pages per book");
             options.addOption("b", "begin-book-index", true, "Index of first book to render");
+            options.addOption("h", "help", false, "print this message");
 
             CommandLineParser parser = new GnuParser();
             CommandLine cmd = parser.parse( options, args);
 
+            if (cmd.hasOption("help")) {
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp( "kimabo", options );
+                System.exit(0);
+            }
             if (cmd.hasOption("series-name")) {
                 seriesName = cmd.getOptionValue("series-name");
             }
