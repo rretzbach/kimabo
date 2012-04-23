@@ -67,13 +67,24 @@ public class ResizableImage {
         int sourceWidth = image.getWidth();
         int sourceHeight = image.getHeight();
 
-        double resizeFactor = (double) preferredHeight / (double) sourceHeight;
-
-        // if source image orientation is landscape
-        if (resizeFactor * sourceWidth > preferredWidth) {
-            // then change factor so that width won't exceed 600px even if height will be smaller than 800px
-            resizeFactor = (double) preferredWidth / (double) sourceWidth;
+        // portait as default
+        int targetWidth = sourceWidth;
+        int targetHeight = sourceHeight;
+        
+        // landscape
+        if (sourceWidth > sourceHeight) {
+            targetWidth = sourceHeight;
+            targetHeight = sourceWidth;
         }
+        
+        double resizeFactor = (double) preferredHeight / (double) targetHeight;
+
+        // if scaled width is still to wide
+        if (resizeFactor * targetWidth > preferredWidth) {
+            // then change factor so that width won't exceed 600px even if height will be smaller than 800px
+            resizeFactor = (double) preferredWidth / (double) targetWidth;
+        }
+        
         return resizeFactor;
     }
 
